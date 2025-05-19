@@ -1,37 +1,28 @@
-// Elements
-const pom = document.querySelector('.tecla_pom'),
-  clap = document.querySelector('.tecla_clap'),
-  tim = document.querySelector('.tecla_tim'),
-  puff = document.querySelector('.tecla_puff'),
-  splash = document.querySelector('.tecla_splash'),
-  toim = document.querySelector('.tecla_toim'),
-  psh = document.querySelector('.tecla_psh'),
-  tic = document.querySelector('.tecla_tic'),
-  tom = document.querySelector('.tecla_tom');
-// Audio
-const pomAudio = document.querySelector('#som_tecla_pom'),
-  clapAudio = document.querySelector('#som_tecla_clap'),
-  timAudio = document.querySelector('#som_tecla_tim'),
-  puffAudio = document.querySelector('#som_tecla_puff'),
-  splashAudio = document.querySelector('#som_tecla_splash'),
-  toimAudio = document.querySelector('#som_tecla_toim'),
-  pshAudio = document.querySelector('#som_tecla_psh'),
-  ticAudio = document.querySelector('#som_tecla_tic'),
-  tomAudio = document.querySelector('#som_tecla_tom');
+const keysList = document.querySelectorAll('.tecla');
 
-function playAudio(el, audioEl) {
-  const play = el.addEventListener('click', (e) => {
-    audioEl.play();
-  });
-  return play;
+function playSong(audioSelector) {
+  const element = document.querySelector(audioSelector);
+
+  if (element && element.localName === 'audio') {
+    element.play();
+  } else {
+    throw new Error('Elemento não encontrado ou seletor invalido');
+  }
 }
 
-playAudio(pom, pomAudio);
-playAudio(clap, clapAudio);
-playAudio(tim, timAudio);
-playAudio(puff, puffAudio);
-playAudio(splash, splashAudio);
-playAudio(toim, toimAudio);
-playAudio(psh, pshAudio);
-playAudio(tic, ticAudio);
-playAudio(tom, tomAudio);
+for (let couter = 0; couter < keysList.length; couter++) {
+  const key = keysList[couter];
+  const instrument = key.classList[1];
+  const idAudio = `#som_${instrument}`;
+  key.addEventListener('click', () => {
+    playSong(idAudio);
+  });
+  key.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.code === 'Enter') {
+      key.classList.add('ativa');
+    }
+  });
+  key.addEventListener('keyup', () => {
+    key.classList.remove('ativa');
+  });
+}
